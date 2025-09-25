@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Ваша Корзина 🛍️</h1>
+
+{% if cart_items %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="list-group shadow-sm">
+            {% for item in cart_items %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    {% if item.product.image_url %}
+                    <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" style="width: 60px; height: 60px; object-fit: cover; margin-right: 15px;" class="rounded">
+                    {% endif %}
+                    <div>
+                        <h5 class="mb-0">{{ item.product.name }}</h5>
+                        <small class="text-muted">{{ item.product.price }} руб. / шт.</small>
+                    </div>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <span class="badge bg-secondary me-2">Кол-во: {{ item.quantity }}</span>
+                    </div>
+                    
+                    <h5 class="text-success me-3 mb-0">{{ item.total_price }} руб.</h5>
+                    
+                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-sm btn-outline-danger" title="Удалить одну единицу">
+                        &times;
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-lg-4 mt-4 mt-lg-0">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h3 class="card-title text-center text-primary mb-4">Итого</h3>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <p class="mb-0 fw-bold">Общая сумма:</p>
+                    <span class="fs-4 text-danger">{{ total_price }} руб.</span>
+                </div>
+                <hr>
+                <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg w-100 mt-3">
+                    Оформить заказ
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-warning text-center mt-5">
+    <h4 class="alert-heading">Ваша корзина пуста!</h4>
+    <p>Пора наполнить ее вкусными продуктами.</p>
+    <a href="{% url 'product_list' %}" class="btn btn-warning mt-2">Перейти к покупкам</a>
+</div>
+{% endif %}
+{% endblock %}

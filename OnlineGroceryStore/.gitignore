@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE (например, VS Code, PyCharm)
+.idea/
+.vscode/
+
+# Django
+*.log
+*.sqlite3
+db.sqlite3
+/media
+/static
+
+# Environment
+venv/
+env/

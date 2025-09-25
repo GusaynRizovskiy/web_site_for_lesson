@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Список Продуктов{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-center text-success">Свежие продукты с доставкой</h1>
+
+<div class="row">
+    {% for product in products %}
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card card-product h-100 shadow">
+            {% if product.image_url %}
+            <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <img src="https://via.placeholder.com/400x200?text=Нет+изображения" class="card-img-top" alt="Нет изображения" style="height: 200px; object-fit: cover;">
+            {% endif %}
+            
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-success">{{ product.name }}</h5>
+                <p class="card-text text-muted">{{ product.description|truncatechars:100 }}</p>
+                <h4 class="mt-auto text-danger fw-bold">{{ product.price }} руб.</h4>
+                
+                <div class="mt-3">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'add_to_cart' product.id %}" class="btn btn-success w-100">
+                            <i class="fas fa-cart-plus"></i> Добавить в корзину
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-secondary w-100">
+                            Войдите, чтобы купить
+                        </a>
+                    {% endif %}
+                </div>
+                
+                {% if user.is_superuser %}
+                <div class="mt-2 d-flex justify-content-between">
+                    <a href="{% url 'product_update' product.id %}" class="btn btn-outline-primary btn-sm me-1 w-50">Изменить</a>
+                    <a href="{% url 'product_delete' product.id %}" class="btn btn-outline-danger btn-sm ms-1 w-50">Удалить</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            Пока нет продуктов в продаже. <br>
+            {% if user.is_superuser %}
+            <a href="{% url 'product_create' %}" class="alert-link">Добавьте первый!</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
