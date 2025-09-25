@@ -27,7 +27,7 @@ class ProductListView(ListView):
 @method_decorator(login_required, name='dispatch')
 class ProductCreateView(CreateView):
     model = Product
-    fields = ['name', 'description', 'price', 'image_url']
+    fields = ['name', 'description', 'price', 'image']
     success_url = reverse_lazy('product_list')
     template_name = 'product_form.html'
 
@@ -40,7 +40,7 @@ class ProductCreateView(CreateView):
 @method_decorator(login_required, name='dispatch')
 class ProductUpdateView(UpdateView):
     model = Product
-    fields = ['name', 'description', 'price', 'image_url']
+    fields = ['name', 'description', 'price', 'image']
     success_url = reverse_lazy('product_list')
     template_name = 'product_form.html'
 

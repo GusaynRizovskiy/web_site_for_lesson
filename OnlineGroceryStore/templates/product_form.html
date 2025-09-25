@@ -1,10 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}
+    {% if form.instance.pk %}Редактирование продукта{% else %}Добавление нового продукта{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-success text-white text-center py-3">
+                <h3 class="mb-0">
+                    {% if form.instance.pk %}
+                        📝 Редактировать продукт: **{{ form.instance.name }}**
+                    {% else %}
+                        ➕ Добавить новый продукт
+                    {% endif %}
+                </h3>
+            </div>
+            
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+                            
+                            {% if field.name == 'image' and form.instance.image %}
+                                <div class="mb-2 p-2 border rounded bg-light d-flex align-items-center">
+                                    <img src="{{ form.instance.get_image_url }}" alt="Текущее изображение" style="width: 100px; height: 100px; object-fit: cover;" class="me-3 rounded">
+
+                                    <div>
+                                        <div class="form-check">
+                                            {{ field.initial_widget }}
+                                            <label class="form-check-label text-danger" for="{{ field.id_for_label }}_0">
+                                                Удалить текущее изображение
+                                            </label>
+                                        </div>
+                                        <p class="mt-2 mb-0">
+                                            <small class="text-muted">Загрузить новый файл:</small>
+                                        </p>
+                                    </div>
+                                </div>
+                                {{ field }}
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger mt-1 p-2">{{ error }}</div>
+                            {% endfor %}
+
+                            {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <hr>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            {% if form.instance.pk %}Сохранить изменения{% else %}Создать продукт{% endif %}
+                        </button>
+                        <a href="{% url 'product_list' %}" class="btn btn-outline-secondary">
+                            Отмена и вернуться к списку
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const formFields = document.querySelectorAll('.card-body form input, .card-body form textarea, .card-body form select');
+        formFields.forEach(field => {
+            // Исключаем скрытые поля и чекбоксы
+            if (field.type !== 'hidden' && field.type !== 'checkbox' && field.name !== 'image-clear') {
+                field.classList.add('form-control');
+            }
+        });
+    });
+</script>
+{% endblock %}
