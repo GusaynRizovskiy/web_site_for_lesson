@@ -25,9 +25,7 @@ SECRET_KEY = 'django-insecure-taqk+ohria5@j8jwxmy$=53zt#m7#ymui4a1s7dfh*bqxy$6co
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False # Должно быть False для production
 # Разрешаем доступ с любых адресов
-ALLOWED_HOSTS = ['*', 'ваш_локальный_ip_вм']
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', '127.0.0.1']
 
 
 # Application definition
@@ -121,6 +119,9 @@ LOGOUT_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# ⬅️ ДОБАВЛЯЕМ ЭТУ СТРОКУ: Путь, куда будут скопированы все статические файлы
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
